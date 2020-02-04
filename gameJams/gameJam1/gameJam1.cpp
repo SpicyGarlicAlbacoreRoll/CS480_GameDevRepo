@@ -5,11 +5,48 @@
 #include "RunnerInputComponent.hpp"
 #pragma comment(lib, "gamelib.lib")
 
+class QuitCommand : public GameLib::InputCommand {
+public:
+    const char* type() const override { return "QuitCommand"; }
+
+    bool execute(float amount) override {
+        GameLib::Locator::getContext()->quitRequested = true;
+        return true;
+    }
+};
+
+
+class MovementCommand : public GameLib::InputCommand {
+public:
+    const char* type() const override {
+        return "MovementCommand";
+    }
+    bool execute(float amount) override {
+        if (amount < 0.1f && amount > -0.1f)
+            amount = 0.0f;
+        else if (amount > 0.5f)
+            amount = 1.0f;
+        else if (amount < -0.5f)
+            amount = -1.0f;
+        else if (amount > 0.0f)
+            amount = 0.5f;
+        else
+            amount = -0.5f;
+        return InputCommand::execute(amount);
+    }
+};
+
 int main() {
     GameLib::Context context(1280, 720, GameLib::WindowDefault);
     GameLib::Audio audio;
     GameLib::InputHandler input;
     GameLib::Graphics graphics{ &context };
+
+    QuitCommand quitCommand;
+    MovementCommand yAxisCommand;
+
+    input.back = &quitCommand;
+    input.axis1Y = &yAxisCommand;
 
     GameLib::Locator::provide(&context);
     if (context.audioInitialized())
@@ -43,7 +80,7 @@ int main() {
         new RunnerInputComponent(), new GameLib::SimpleActorComponent(), new GameLib::SimplePhysicsComponent(), new GameLib::SimpleGraphicsComponent());
     
     player.position.x = graphics.getCenterX() / (float)graphics.getTileSizeX();
-    player.position.y = graphics.getCenterY() / (float)graphics.getTileSizeY();
+    player.position.y = (graphics.getHeight() / (float)graphics.getTileSizeY()) - 1;
     player.spriteLibId = 0;
     player.spriteId = 4;
     world.actors.push_back(&player);
@@ -62,6 +99,31 @@ int main() {
     HFLOGDEBUG("Enemy position X %5.1f", enemy.position.x);
     HFLOGDEBUG("Enemy position Y %5.1f", enemy.position.y);
     world.actors.push_back(&enemy);
+
+    for (float y = 0; y < graphics.getHeight(); y++) {
+
+        GameLib::Actor *wallLeft = new GameLib::Actor(
+            nullptr, new GameLib::SimpleActorComponent(), new GameLib::SimplePhysicsComponent(), new GameLib::SimpleGraphicsComponent());
+
+        world.actors.push_back(wallLeft);
+        wallLeft->position.x = graphics.getCenterX() / (float)graphics.getTileSizeX() - 2;
+        wallLeft->position.y = y;
+        wallLeft->spriteLibId = 0;
+        wallLeft->spriteId = 1;
+
+        
+
+        GameLib::Actor* wallRight = new GameLib::Actor(
+            nullptr, new GameLib::SimpleActorComponent(), new GameLib::SimplePhysicsComponent(), new GameLib::SimpleGraphicsComponent());
+
+        world.actors.push_back(wallRight);
+        wallRight->position.x = graphics.getCenterX() / (float)graphics.getTileSizeX() + 2;
+        wallRight->position.y = y;
+        wallRight->spriteLibId = 0;
+        wallRight->spriteId = 1;
+
+        
+    }
 
     Hf::StopWatch stopwatch;
     double frames = 0;
@@ -106,6 +168,7 @@ int main() {
         frames++;
         std::this_thread::yield();
     }
+    return 0;
     // std::cout << "Hello World!\n";
 }
 
