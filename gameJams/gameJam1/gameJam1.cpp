@@ -75,7 +75,58 @@ int main() {
     //if (!world.load(worldPath)) {
     //    HFLOGWARN("world.txt not found");
     //}
+    for (float y = 0; y < graphics.getHeight(); y++) {
 
+        GameLib::Actor* wallLeft = new GameLib::Actor(
+            nullptr, new GameLib::SimpleActorComponent(), new GameLib::SimplePhysicsComponent(), new GameLib::SimpleGraphicsComponent());
+
+        world.actors.push_back(wallLeft);
+        wallLeft->position.x = graphics.getCenterX() / (float)graphics.getTileSizeX() - 2;
+        wallLeft->position.y = y;
+        wallLeft->spriteLibId = 0;
+        wallLeft->spriteId = 1;
+
+
+
+        GameLib::Actor* wallRight = new GameLib::Actor(
+            nullptr, new GameLib::SimpleActorComponent(), new GameLib::SimplePhysicsComponent(), new GameLib::SimpleGraphicsComponent());
+
+        world.actors.push_back(wallRight);
+        wallRight->position.x = graphics.getCenterX() / (float)graphics.getTileSizeX() + 2;
+        wallRight->position.y = y;
+        wallRight->spriteLibId = 0;
+        wallRight->spriteId = 1;
+
+
+    }
+
+    for (float y = 0; y < graphics.getHeight(); y++) {
+
+        for (float x = 0; x < 3; x++) {
+            GameLib::Actor* floor = new GameLib::Actor(
+                nullptr, new GameLib::SimpleActorComponent(), new GameLib::SimplePhysicsComponent(), new GameLib::SimpleGraphicsComponent());
+
+            world.actors.push_back(floor);
+            floor->position.x = graphics.getCenterX() / (float)graphics.getTileSizeX() + (x - 1);
+            floor->position.y = y;
+            floor->spriteLibId = 0;
+            floor->spriteId = 0;
+        }
+
+
+
+
+        //GameLib::Actor* wallRight = new GameLib::Actor(
+        //    nullptr, new GameLib::SimpleActorComponent(), new GameLib::SimplePhysicsComponent(), new GameLib::SimpleGraphicsComponent());
+
+        //world.actors.push_back(wallRight);
+        //wallRight->position.x = graphics.getCenterX() / (float)graphics.getTileSizeX() + 2;
+        //wallRight->position.y = y;
+        //wallRight->spriteLibId = 0;
+        //wallRight->spriteId = 1;
+
+
+    }
     GameLib::Actor player(
         new RunnerInputComponent(), new GameLib::SimpleActorComponent(), new GameLib::SimplePhysicsComponent(), new GameLib::SimpleGraphicsComponent());
     
@@ -100,30 +151,7 @@ int main() {
     HFLOGDEBUG("Enemy position Y %5.1f", enemy.position.y);
     world.actors.push_back(&enemy);
 
-    for (float y = 0; y < graphics.getHeight(); y++) {
 
-        GameLib::Actor *wallLeft = new GameLib::Actor(
-            nullptr, new GameLib::SimpleActorComponent(), new GameLib::SimplePhysicsComponent(), new GameLib::SimpleGraphicsComponent());
-
-        world.actors.push_back(wallLeft);
-        wallLeft->position.x = graphics.getCenterX() / (float)graphics.getTileSizeX() - 2;
-        wallLeft->position.y = y;
-        wallLeft->spriteLibId = 0;
-        wallLeft->spriteId = 1;
-
-        
-
-        GameLib::Actor* wallRight = new GameLib::Actor(
-            nullptr, new GameLib::SimpleActorComponent(), new GameLib::SimplePhysicsComponent(), new GameLib::SimpleGraphicsComponent());
-
-        world.actors.push_back(wallRight);
-        wallRight->position.x = graphics.getCenterX() / (float)graphics.getTileSizeX() + 2;
-        wallRight->position.y = y;
-        wallRight->spriteLibId = 0;
-        wallRight->spriteId = 1;
-
-        
-    }
 
     Hf::StopWatch stopwatch;
     double frames = 0;
