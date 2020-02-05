@@ -173,16 +173,16 @@ int main() {
         input.handle();
 
         context.clearScreen(GameLib::Black);
-        for (float y = 0; y < graphics.getHeight(); y++) {
+        for (float y = 0; y * graphics.getTileSizeY() < graphics.getHeight(); y++) {
 
             for (float x = 0; x < 3; x++) {
                 GameLib::SPRITEINFO s;
                 s.position = {
-                graphics.getCenterX() / (float)graphics.getTileSizeX() + (x - 1),
-                y
+                graphics.getCenterX() + (x - 1) * graphics.getTileSizeY(),
+                y * graphics.getTileSizeY()
                 };
-                s.center = { 0.0f, 0.0f };
-                s.flipFlags = 0;
+                //s.center = { 0.0f, 0.0f };
+                //s.flipFlags = 0;
 
                 context.drawTexture(s.position, 0, 0);
                 /*         GameLib::Actor* floor = new GameLib::Actor(
