@@ -9,5 +9,6 @@ public:
 	void update(GameLib::Actor& actor) override;
 
 private:
-	bool buttonPressed = false;
+	bool buttonPressedY = false;
+	bool buttonPressedX = false;
 };
