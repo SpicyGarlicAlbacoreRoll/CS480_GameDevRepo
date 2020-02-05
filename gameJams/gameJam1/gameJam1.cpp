@@ -4,6 +4,8 @@
 #include <gamelib.hpp>
 #include "RunnerInputComponent.hpp"
 #include "MonsterActorComponent.hpp"
+#include "BoxCollisionComponent.hpp"
+
 #pragma comment(lib, "gamelib.lib")
 
 class QuitCommand : public GameLib::InputCommand {
@@ -15,7 +17,6 @@ public:
         return true;
     }
 };
-
 
 class MovementCommand : public GameLib::InputCommand {
 public:
@@ -129,35 +130,9 @@ int main() {
 
     }
 
-    for (float y = 0; y < graphics.getHeight(); y++) {
 
-        for (float x = 0; x < 3; x++) {
-            GameLib::Actor* floor = new GameLib::Actor(
-                nullptr, new GameLib::SimpleActorComponent(), new GameLib::SimplePhysicsComponent(), new GameLib::SimpleGraphicsComponent());
-
-            world.actors.push_back(floor);
-            floor->position.x = graphics.getCenterX() / (float)graphics.getTileSizeX() + (x - 1);
-            floor->position.y = y;
-            floor->spriteLibId = 0;
-            floor->spriteId = 0;
-        }
-
-
-
-
-        //GameLib::Actor* wallRight = new GameLib::Actor(
-        //    nullptr, new GameLib::SimpleActorComponent(), new GameLib::SimplePhysicsComponent(), new GameLib::SimpleGraphicsComponent());
-
-        //world.actors.push_back(wallRight);
-        //wallRight->position.x = graphics.getCenterX() / (float)graphics.getTileSizeX() + 2;
-        //wallRight->position.y = y;
-        //wallRight->spriteLibId = 0;
-        //wallRight->spriteId = 1;
-
-
-    }
     GameLib::Actor player(
-        new RunnerInputComponent(), new GameLib::SimpleActorComponent(), new GameLib::SimplePhysicsComponent(), new GameLib::SimpleGraphicsComponent());
+        new RunnerInputComponent(), new GameLib::SimpleActorComponent(), new BoxCollisionComponent(), new GameLib::SimpleGraphicsComponent());
     
     player.position.x = graphics.getCenterX() / (float)graphics.getTileSizeX();
     player.position.y = (graphics.getHeight() / (float)graphics.getTileSizeY()) - 1;
@@ -169,7 +144,7 @@ int main() {
     HFLOGDEBUG("Player position Y %5.1f", player.position.y);
 
     GameLib::Actor enemy(
-        nullptr, new MonsterActorComponent(), new GameLib::SimplePhysicsComponent(), new GameLib::SimpleGraphicsComponent());
+        nullptr, new MonsterActorComponent(), new BoxCollisionComponent(), new GameLib::SimpleGraphicsComponent());
 
     enemy.position.x = graphics.getCenterX() / (float)graphics.getTileSizeX();
     enemy.position.y = 1;
@@ -198,7 +173,42 @@ int main() {
         input.handle();
 
         context.clearScreen(GameLib::Black);
+        for (float y = 0; y < graphics.getHeight(); y++) {
 
+            for (float x = 0; x < 3; x++) {
+                GameLib::SPRITEINFO s;
+                s.position = {
+                graphics.getCenterX() / (float)graphics.getTileSizeX() + (x - 1),
+                y
+                };
+                s.center = { 0.0f, 0.0f };
+                s.flipFlags = 0;
+
+                context.drawTexture(s.position, 0, 0);
+                /*         GameLib::Actor* floor = new GameLib::Actor(
+                             nullptr, new GameLib::SimpleActorComponent(), nullptr, new GameLib::SimpleGraphicsComponent());
+
+                         world.actors.push_back(floor);
+                         floor->position.x = graphics.getCenterX() / (float)graphics.getTileSizeX() + (x - 1);
+                         floor->position.y = y;
+                         floor->spriteLibId = 0;
+                         floor->spriteId = 0;*/
+            }
+
+
+
+
+            //GameLib::Actor* wallRight = new GameLib::Actor(
+            //    nullptr, new GameLib::SimpleActorComponent(), new GameLib::SimplePhysicsComponent(), new GameLib::SimpleGraphicsComponent());
+
+            //world.actors.push_back(wallRight);
+            //wallRight->position.x = graphics.getCenterX() / (float)graphics.getTileSizeX() + 2;
+            //wallRight->position.y = y;
+            //wallRight->spriteLibId = 0;
+            //wallRight->spriteId = 1;
+
+
+        }
         // for (unsigned x = 0; x < world.worldSizeX; x++) {
         //    for (unsigned y = 0; y < world.worldSizeY; y++) {
         //        GameLib::SPRITEINFO s;
