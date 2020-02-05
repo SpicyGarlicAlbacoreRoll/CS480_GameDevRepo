@@ -46,7 +46,7 @@ bool BoxCollisionComponent::collides(GameLib::Actor& a, GameLib::Actor& b)
 {
 	if (a.position.x == b.position.x && a.position.y == b.position.y) {
 		HFLOGDEBUG("Collision!");
-		if (a.spriteId == 1) {
+		if (a.spriteId == 1 || a.spriteId == 2 || a.spriteId == 3) {
 			return true;
 		}
 	}

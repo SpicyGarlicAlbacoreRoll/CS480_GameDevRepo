@@ -107,9 +107,30 @@ int main() {
     //    HFLOGWARN("world.txt not found");
     //}
     for (float y = 0; y < graphics.getHeight(); y++) {
+        int val = rand() % 30 + (-15);
 
+        if (val % 2 == 0) {
+            GameLib::Actor* Crate = new GameLib::Actor(
+                nullptr, new GameLib::SimpleActorComponent(), new BoxCollisionComponent("environment"), new GameLib::SimpleGraphicsComponent());
+
+            
+
+            Crate->spriteLibId = 0;
+            Crate->spriteId = 2;
+            if (val > 0) {
+                Crate->position.x = graphics.getCenterX() / (float)graphics.getTileSizeX() - 1;
+                Crate->position.y = y;
+            }
+            else {
+                Crate->position.x = graphics.getCenterX() / (float)graphics.getTileSizeX() + 1;
+                Crate->position.y = y;
+            }
+
+            world.actors.push_back(Crate);
+        }
+        
         GameLib::Actor* wallLeft = new GameLib::Actor(
-            nullptr, new GameLib::SimpleActorComponent(), new GameLib::SimplePhysicsComponent(), new GameLib::SimpleGraphicsComponent());
+            nullptr, new GameLib::SimpleActorComponent(), new BoxCollisionComponent("environment"), new GameLib::SimpleGraphicsComponent());
 
         world.actors.push_back(wallLeft);
         wallLeft->position.x = graphics.getCenterX() / (float)graphics.getTileSizeX() - 2;
@@ -190,38 +211,8 @@ int main() {
                 //s.flipFlags = 0;
 
                 context.drawTexture(s.position, 0, 0);
-                /*         GameLib::Actor* floor = new GameLib::Actor(
-                             nullptr, new GameLib::SimpleActorComponent(), nullptr, new GameLib::SimpleGraphicsComponent());
-
-                         world.actors.push_back(floor);
-                         floor->position.x = graphics.getCenterX() / (float)graphics.getTileSizeX() + (x - 1);
-                         floor->position.y = y;
-                         floor->spriteLibId = 0;
-                         floor->spriteId = 0;*/
             }
-
-
-
-
-            //GameLib::Actor* wallRight = new GameLib::Actor(
-            //    nullptr, new GameLib::SimpleActorComponent(), new GameLib::SimplePhysicsComponent(), new GameLib::SimpleGraphicsComponent());
-
-            //world.actors.push_back(wallRight);
-            //wallRight->position.x = graphics.getCenterX() / (float)graphics.getTileSizeX() + 2;
-            //wallRight->position.y = y;
-            //wallRight->spriteLibId = 0;
-            //wallRight->spriteId = 1;
-
-
         }
-        // for (unsigned x = 0; x < world.worldSizeX; x++) {
-        //    for (unsigned y = 0; y < world.worldSizeY; y++) {
-        //        GameLib::SPRITEINFO s;
-        //        s.position = { x * 32, y * 32 };
-        //        auto t = world.getTile(x, y);
-        //        context.drawTexture(s.position, 0, t.charDesc);
-        //    }
-        //}
 
         world.update(dt, graphics);
 
