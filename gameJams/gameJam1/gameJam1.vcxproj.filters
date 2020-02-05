@@ -27,6 +27,9 @@
     <ClCompile Include="BoxCollisionComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="RunnerActorComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RunnerInputComponent.hpp">
@@ -36,6 +39,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="BoxCollisionComponent.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RunnerActorComponent.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

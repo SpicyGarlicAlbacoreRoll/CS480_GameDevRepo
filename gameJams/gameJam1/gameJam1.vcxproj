@@ -154,11 +154,13 @@
     <ClCompile Include="BoxCollisionComponent.cpp" />
     <ClCompile Include="gameJam1.cpp" />
     <ClCompile Include="MonsterActorComponent.cpp" />
+    <ClCompile Include="RunnerActorComponent.cpp" />
     <ClCompile Include="RunnerInputComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BoxCollisionComponent.hpp" />
     <ClInclude Include="MonsterActorComponent.hpp" />
+    <ClInclude Include="RunnerActorComponent.hpp" />
     <ClInclude Include="RunnerInputComponent.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

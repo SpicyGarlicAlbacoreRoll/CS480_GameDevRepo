@@ -3,6 +3,7 @@
 
 #include <gamelib.hpp>
 #include "RunnerInputComponent.hpp"
+#include "RunnerActorComponent.hpp"
 #include "MonsterActorComponent.hpp"
 #include "BoxCollisionComponent.hpp"
 
@@ -132,19 +133,23 @@ int main() {
 
 
     GameLib::Actor player(
-        new RunnerInputComponent(), new GameLib::SimpleActorComponent(), new BoxCollisionComponent(), new GameLib::SimpleGraphicsComponent());
+        new RunnerInputComponent(), new RunnerActorComponent(), new BoxCollisionComponent("player"), new GameLib::SimpleGraphicsComponent());
     
     player.position.x = graphics.getCenterX() / (float)graphics.getTileSizeX();
     player.position.y = (graphics.getHeight() / (float)graphics.getTileSizeY()) - 1;
     player.spriteLibId = 0;
     player.spriteId = 4;
+    const auto* name = "player";
+    player.rename(name);
+    //const char * ugh = player.name;
+    HFLOGDEBUG(name);
     world.actors.push_back(&player);
 
     HFLOGDEBUG("Player position X %5.1f", player.position.x);
     HFLOGDEBUG("Player position Y %5.1f", player.position.y);
 
     GameLib::Actor enemy(
-        nullptr, new MonsterActorComponent(), new BoxCollisionComponent(), new GameLib::SimpleGraphicsComponent());
+        nullptr, new MonsterActorComponent(), new BoxCollisionComponent("enemy"), new GameLib::SimpleGraphicsComponent());
 
     enemy.position.x = graphics.getCenterX() / (float)graphics.getTileSizeX();
     enemy.position.y = 1;
