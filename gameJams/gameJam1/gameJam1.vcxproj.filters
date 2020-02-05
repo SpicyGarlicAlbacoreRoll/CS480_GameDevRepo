@@ -21,9 +21,15 @@
     <ClCompile Include="RunnerInputComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MonsterActorComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RunnerInputComponent.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MonsterActorComponent.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

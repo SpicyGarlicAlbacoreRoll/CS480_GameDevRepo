@@ -3,6 +3,7 @@
 
 #include <gamelib.hpp>
 #include "RunnerInputComponent.hpp"
+#include "MonsterActorComponent.hpp"
 #pragma comment(lib, "gamelib.lib")
 
 class QuitCommand : public GameLib::InputCommand {
@@ -36,6 +37,32 @@ public:
     }
 };
 
+class ShiftCommand : public GameLib::InputCommand {
+public:
+    const char* type() const override {
+        return "ShiftCommand";
+    }
+
+    bool execute(float amount) override {
+        if (amount < 0.1f && amount > -0.1f) {
+            amount = 0.0f;
+            buttonDown = false;
+        }
+        else if (buttonDown == false) {
+            if (amount > 0.0f)
+                amount = 1.0f;
+            else
+            amount = -1.0f;
+
+            buttonDown = true;
+        }
+        return InputCommand::execute(amount);
+    }
+
+private:
+    boolean buttonDown = false;
+};
+
 int main() {
     GameLib::Context context(1280, 720, GameLib::WindowDefault);
     GameLib::Audio audio;
@@ -44,9 +71,11 @@ int main() {
 
     QuitCommand quitCommand;
     MovementCommand yAxisCommand;
+    MovementCommand xAxisCommand;
 
     input.back = &quitCommand;
     input.axis1Y = &yAxisCommand;
+    input.axis1X = &xAxisCommand;
 
     GameLib::Locator::provide(&context);
     if (context.audioInitialized())
@@ -140,7 +169,7 @@ int main() {
     HFLOGDEBUG("Player position Y %5.1f", player.position.y);
 
     GameLib::Actor enemy(
-        nullptr, new GameLib::SimpleActorComponent(), new GameLib::SimplePhysicsComponent(), new GameLib::SimpleGraphicsComponent());
+        nullptr, new MonsterActorComponent(), new GameLib::SimplePhysicsComponent(), new GameLib::SimpleGraphicsComponent());
 
     enemy.position.x = graphics.getCenterX() / (float)graphics.getTileSizeX();
     enemy.position.y = 1;

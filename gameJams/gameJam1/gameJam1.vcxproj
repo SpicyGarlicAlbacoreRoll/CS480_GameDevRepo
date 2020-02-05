@@ -152,9 +152,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="gameJam1.cpp" />
+    <ClCompile Include="MonsterActorComponent.cpp" />
     <ClCompile Include="RunnerInputComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="MonsterActorComponent.hpp" />
     <ClInclude Include="RunnerInputComponent.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
