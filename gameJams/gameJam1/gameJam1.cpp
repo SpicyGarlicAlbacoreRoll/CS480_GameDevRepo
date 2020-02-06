@@ -107,6 +107,8 @@ int main() {
     //if (!world.load(worldPath)) {
     //    HFLOGWARN("world.txt not found");
     //}
+
+
     for (float y = 0; y < graphics.getHeight(); y++) {
         int val = rand() % 30 + (-15);
 
@@ -145,7 +147,7 @@ int main() {
         wallLeft->spriteLibId = 0;
         wallLeft->spriteId = 1;
 
-
+        
         
         auto rightWallCollider = new BoxCollisionComponent("environment", boxColliders);
         GameLib::Actor* wallRight = new GameLib::Actor(
@@ -161,6 +163,24 @@ int main() {
 
     }
 
+    for (float y = 0; y < 5; y++) {
+
+        for (float x = 0; x < 5; x++) {
+
+            if (!(y > 0 && y < 4 && x > 0 && x < 4)) {
+                auto wallCollider = new BoxCollisionComponent("environment", boxColliders);
+                GameLib::Actor* wall = new GameLib::Actor(
+                    nullptr, new GameLib::SimpleActorComponent(), wallCollider, new GameLib::SimpleGraphicsComponent());
+                wallCollider->setActor(wall);
+
+                world.actors.push_back(wall);
+                wall->position.x = x;
+                wall->position.y = y;
+                wall->spriteLibId = 0;
+                wall->spriteId = 1;
+            }
+        }
+    }
     
     auto playerCollider = new BoxCollisionComponent("player", boxColliders);
     GameLib::Actor* player = new GameLib::Actor(
@@ -171,6 +191,7 @@ int main() {
     player->position.y = (graphics.getHeight() / (float)graphics.getTileSizeY()) - 1;
     player->spriteLibId = 0;
     player->spriteId = 4;
+
     const auto* name = "player";
     player->rename(name);
     //const char * ugh = player.name;
@@ -200,6 +221,8 @@ int main() {
 
     float t0 = stopwatch.Stop_sf();
 
+
+
     const SDL_Color Blueish_Black = {0, 0, 10, 255};
     while (!context.quitRequested) {
         float t1 = stopwatch.Stop_sf();
@@ -227,6 +250,26 @@ int main() {
                 context.drawTexture(s.position, 0, 0);
             }
         }
+
+        
+        // draw the jail
+        for (float y = 0; y < 5; y++) {
+
+            for (float x = 0; x < 5; x++) {
+                GameLib::SPRITEINFO s;
+                s.position = {
+                (x) * graphics.getTileSizeY(),
+                (y) * graphics.getTileSizeY()
+                };
+                //s.center = { 0.0f, 0.0f };
+                //s.flipFlags = 0;
+
+                if (y > 0 && y < 4 && x > 0 && x < 4) {
+                    context.drawTexture(s.position, 0, 0);
+                }
+            }
+        }
+
 
         world.update(dt, graphics);
 

@@ -27,11 +27,19 @@ void BoxCollisionComponent::update(GameLib::Actor& actor, GameLib::World& world)
 			}
 			else if (collides(a, this)) {
 				if (tag == BoxCollisionComponent::CollisionTag::Player)
-					actor.position = originalPosition;
+					if (a->tag == BoxCollisionComponent::CollisionTag::Environment) {
+						actor.position = originalPosition;
+					}
+					else {
+						HFLOGDEBUG("HIT ENEMY");
+						actor.position = { 0, 0, 0 };
+					}
+				else if (tag == BoxCollisionComponent::CollisionTag::Enemy) {
+						a->getActor()->position = { 2, 2, 0 };
+					}
 			}
 		}
 			originalPosition = actor.position;
-		
 	}
 }
 
@@ -51,6 +59,7 @@ void BoxCollisionComponent::setCollisionTag(std::string tagString)
 		tag = CollisionTag::Player;
 	}
 	else if (tagString == "enemy") {
+		HFLOGDEBUG("ENEMY TAG SET");
 		tag = CollisionTag::Enemy;
 	}
 	else if (tagString == "environment") {
@@ -78,10 +87,11 @@ bool BoxCollisionComponent::collides(GameLib::Actor& a, GameLib::Actor& b)
 bool BoxCollisionComponent::collides(BoxCollisionComponent* a, BoxCollisionComponent* b)
 {
 	if (a->getActor()->position.x == b->getActor()->position.x && a->getActor()->position.y == b->getActor()->position.y) {
-		HFLOGDEBUG("Collision!");
-		if (a->tag == CollisionTag::Enemy || a->tag == CollisionTag::Environment) {
+		HFLOGDEBUG("Collision via tag!");
+
+		//if (a->tag == CollisionTag::Enemy || a->tag == CollisionTag::Environment) {
 			return true;
-		}
+		//}
 	}
 
 	return false;
