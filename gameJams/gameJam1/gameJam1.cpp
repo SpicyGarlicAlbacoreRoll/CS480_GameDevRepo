@@ -102,6 +102,7 @@ int main() {
     GameLib::World world;
     GameLib::Locator::provide(&world);
 
+    auto boxColliders = std::vector<BoxCollisionComponent*>();
     //std::string worldPath = context.findSearchPath("world.txt");
     //if (!world.load(worldPath)) {
     //    HFLOGWARN("world.txt not found");
@@ -110,9 +111,12 @@ int main() {
         int val = rand() % 30 + (-15);
 
         if (val % 2 == 0) {
-            GameLib::Actor* Crate = new GameLib::Actor(
-                nullptr, new GameLib::SimpleActorComponent(), new BoxCollisionComponent("environment"), new GameLib::SimpleGraphicsComponent());
+            GameLib::Actor* Crate;
+            auto crateCollider = new BoxCollisionComponent("environment", boxColliders);
+            Crate = new GameLib::Actor(
+                nullptr, new GameLib::SimpleActorComponent(), crateCollider, new GameLib::SimpleGraphicsComponent());
 
+            crateCollider->setActor(Crate);
             
 
             Crate->spriteLibId = 0;
@@ -129,8 +133,11 @@ int main() {
             world.actors.push_back(Crate);
         }
         
+        
+        auto leftWallCollider = new BoxCollisionComponent("environment", boxColliders);
         GameLib::Actor* wallLeft = new GameLib::Actor(
-            nullptr, new GameLib::SimpleActorComponent(), new BoxCollisionComponent("environment"), new GameLib::SimpleGraphicsComponent());
+            nullptr, new GameLib::SimpleActorComponent(), leftWallCollider, new GameLib::SimpleGraphicsComponent());
+        leftWallCollider->setActor(wallLeft);
 
         world.actors.push_back(wallLeft);
         wallLeft->position.x = graphics.getCenterX() / (float)graphics.getTileSizeX() - 2;
@@ -139,9 +146,11 @@ int main() {
         wallLeft->spriteId = 1;
 
 
-
+        
+        auto rightWallCollider = new BoxCollisionComponent("environment", boxColliders);
         GameLib::Actor* wallRight = new GameLib::Actor(
-            nullptr, new GameLib::SimpleActorComponent(), new GameLib::SimplePhysicsComponent(), new GameLib::SimpleGraphicsComponent());
+            nullptr, new GameLib::SimpleActorComponent(), rightWallCollider, new GameLib::SimpleGraphicsComponent());
+        rightWallCollider->setActor(wallRight);
 
         world.actors.push_back(wallRight);
         wallRight->position.x = graphics.getCenterX() / (float)graphics.getTileSizeX() + 2;
@@ -152,34 +161,37 @@ int main() {
 
     }
 
-
-    GameLib::Actor player(
-        new RunnerInputComponent(), new RunnerActorComponent(), new BoxCollisionComponent("player"), new GameLib::SimpleGraphicsComponent());
     
-    player.position.x = graphics.getCenterX() / (float)graphics.getTileSizeX();
-    player.position.y = (graphics.getHeight() / (float)graphics.getTileSizeY()) - 1;
-    player.spriteLibId = 0;
-    player.spriteId = 4;
+    auto playerCollider = new BoxCollisionComponent("player", boxColliders);
+    GameLib::Actor* player = new GameLib::Actor(
+        new RunnerInputComponent(), new RunnerActorComponent(), playerCollider, new GameLib::SimpleGraphicsComponent());
+    
+    playerCollider->setActor(player);
+    player->position.x = graphics.getCenterX() / (float)graphics.getTileSizeX();
+    player->position.y = (graphics.getHeight() / (float)graphics.getTileSizeY()) - 1;
+    player->spriteLibId = 0;
+    player->spriteId = 4;
     const auto* name = "player";
-    player.rename(name);
+    player->rename(name);
     //const char * ugh = player.name;
     HFLOGDEBUG(name);
-    world.actors.push_back(&player);
+    world.actors.push_back(player);
 
-    HFLOGDEBUG("Player position X %5.1f", player.position.x);
-    HFLOGDEBUG("Player position Y %5.1f", player.position.y);
+    HFLOGDEBUG("Player position X %5.1f", player->position.x);
+    HFLOGDEBUG("Player position Y %5.1f", player->position.y);
 
-    GameLib::Actor enemy(
-        nullptr, new MonsterActorComponent(), new BoxCollisionComponent("enemy"), new GameLib::SimpleGraphicsComponent());
-
-    enemy.position.x = graphics.getCenterX() / (float)graphics.getTileSizeX();
-    enemy.position.y = 1;
-    enemy.spriteLibId = 0;
-    enemy.spriteId = 3;
+    auto enemyCollider = new BoxCollisionComponent("enemy", boxColliders);
+    GameLib::Actor* enemy = new GameLib::Actor(
+        nullptr, new MonsterActorComponent(), enemyCollider, new GameLib::SimpleGraphicsComponent());
+    enemyCollider->setActor(enemy);
+    enemy->position.x = graphics.getCenterX() / (float)graphics.getTileSizeX();
+    enemy->position.y = 1;
+    enemy->spriteLibId = 0;
+    enemy->spriteId = 3;
     
-    HFLOGDEBUG("Enemy position X %5.1f", enemy.position.x);
-    HFLOGDEBUG("Enemy position Y %5.1f", enemy.position.y);
-    world.actors.push_back(&enemy);
+    HFLOGDEBUG("Enemy position X %5.1f", enemy->position.x);
+    HFLOGDEBUG("Enemy position Y %5.1f", enemy->position.y);
+    world.actors.push_back(enemy);
 
 
 
@@ -187,6 +199,8 @@ int main() {
     double frames = 0;
 
     float t0 = stopwatch.Stop_sf();
+
+    const SDL_Color Blueish_Black = {0, 0, 10, 255};
     while (!context.quitRequested) {
         float t1 = stopwatch.Stop_sf();
         float dt = t1 - t0;
@@ -198,7 +212,7 @@ int main() {
         context.getEvents();
         input.handle();
 
-        context.clearScreen(GameLib::Black);
+        context.clearScreen(Blueish_Black);
         for (float y = 0; y * graphics.getTileSizeY() < graphics.getHeight(); y++) {
 
             for (float x = 0; x < 3; x++) {
