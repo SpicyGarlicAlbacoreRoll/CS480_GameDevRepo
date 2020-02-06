@@ -20,18 +20,18 @@ void BoxCollisionComponent::update(GameLib::Actor& actor, GameLib::World& world)
 	//		
 	//	}
 	//}
-
-	for (auto& a : colliders) {
-		if (a->getActor()->getId() == this->actor->getId() || !a->getActor()->active) {
-			continue;
-		}
-		else if (collides(a, this)) {
-			if (tag == BoxCollisionComponent::CollisionTag::Player)
-				actor.position = originalPosition;
-		}
-	}
 	if (tag != BoxCollisionComponent::CollisionTag::Environment) {
-		originalPosition = actor.position;
+		for (auto& a : colliders) {
+			if (a->getActor()->getId() == this->actor->getId() || !a->getActor()->active) {
+				continue;
+			}
+			else if (collides(a, this)) {
+				if (tag == BoxCollisionComponent::CollisionTag::Player)
+					actor.position = originalPosition;
+			}
+		}
+			originalPosition = actor.position;
+		
 	}
 }
 
