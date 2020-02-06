@@ -1,0 +1,17 @@
+define . 1
+define # 0
+define ? 192
+worldsize 5 13
+world  0 #####
+world  1 #...#
+world  2 #...#
+world  3 #...#
+world  4 #...#
+world  5 #...#
+world  6 #...#
+world  7 #...#
+world  8 #...#
+world  9 #...#
+world 10 #...#
+world 11 #...#
+world 12 #####
