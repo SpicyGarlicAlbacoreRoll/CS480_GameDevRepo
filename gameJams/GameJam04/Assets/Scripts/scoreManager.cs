@@ -91,6 +91,11 @@ public class scoreManager : MonoBehaviour
         gameOverState = true;
     }
 
+    public void on_player_hit_event() {
+        score_multiplier = 1.0f;
+        currentMultiplier = 0;
+    }
+
     IEnumerator displayGameOver() {
         float displayScoreTime = 5.0f;
 

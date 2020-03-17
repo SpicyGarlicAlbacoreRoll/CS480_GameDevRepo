@@ -22,7 +22,16 @@ public class killbox : MonoBehaviour
         if(other.gameObject.tag == "Player") {
             // other.gameObject.transform.position = Vector3.zero;
             Destroy(other.gameObject);
-            deathEvent.Invoke();
+            GetComponent<AudioSource>().Play();
+            StartCoroutine("beginDeath");
+            
+            
+
         }
+    }
+
+    IEnumerator beginDeath() {
+        yield return new WaitForSeconds(0.35f);
+        deathEvent.Invoke();
     }
 }
