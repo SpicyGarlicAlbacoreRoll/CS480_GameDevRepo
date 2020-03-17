@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6449887874268397332}
   - component: {fileID: 6449887874268397419}
   - component: {fileID: 6449887874268397333}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: backgroundCloud
   m_TagString: Untagged
   m_Icon: {fileID: 0}
