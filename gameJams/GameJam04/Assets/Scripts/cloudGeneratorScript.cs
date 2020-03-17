@@ -42,6 +42,7 @@ public class cloudGeneratorScript : MonoBehaviour
                 cloud.GetComponent<backgroundCloudScript>().cloudSpeed *= cloud.GetComponent<Transform>().localScale.x;
                 cloud.GetComponent<SpriteRenderer>().sortingOrder = -(int)cloud.GetComponent<Transform>().localScale.x;
                 cloud.AddComponent<PolygonCollider2D>();
+                cloud.transform.parent = this.gameObject.transform;
                 timeSinceCloud = 0.0f;
                 // cloud.GetComponent<PolygonCollider2D>().bounds
                         // _collider.size = new Vector3(_sprite.bounds.size.x / transform.lossyScale.x,
